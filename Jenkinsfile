@@ -75,7 +75,7 @@ spec:
               git config user.email "jenkins@kopo17"
               git config user.name "jenkins-ci"
               git add kustomization.yaml
-              git commit -m "deploy: hotel-site 이미지 :${TAG} [skip ci]"
+              git commit -m "deploy: hotel-site 이미지 :${TAG} [skip ci]" || echo "변경 없음, 스킵"
               git push origin main
             '''
           }
