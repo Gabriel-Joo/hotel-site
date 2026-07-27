@@ -8,7 +8,7 @@
    ============================================================ */
 
 // json-server 기본 주소 (Live Server 5500 / json-server 3000 동시 구동)
-const API = "/api";
+const API = "api";
 /** 공통 fetch 헬퍼: 실패 시 에러를 throw(호출측에서 try/catch 처리) */
 async function fetchJSON(path) {
   const res = await fetch(`${API}${path}`);
