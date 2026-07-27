@@ -1,0 +1,622 @@
+/* ============================================================
+   reservation.css  —  실시간예약 페이지 전용
+   (타이틀 배너는 common.css .title-banner 공통)
+   ============================================================ */
+
+/* 본문: content(1440) 안에서 가운데 정렬. 시안 실측 —
+   좌우 62px 패딩 → 실질 폭 1316(1440-62×2). 위쪽 60px(배너~객실명),
+   아래쪽 60px(콘텐츠~푸터).
+   .content 의 공통 좌우 padding(24) 이 중복되지 않도록 이 페이지에선 0으로. */
+.content {
+  padding: 0; /* reservation.css 는 reservation.html 전용 → 다른 페이지 영향 없음 */
+}
+.rsv-wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 60px 62px 60px; /* 상 60 / 좌우 62 / 하 60 (데스크톱) */
+}
+/* ---------- 3. 객실명 (대문자) ----------
+   common .section-title 을 이 페이지에서만 font-weight 300(Light)/ls 0 으로 덮는다.
+   (font-size 30px, text-align center 는 공통값과 동일 → 유지). 위쪽 margin 은
+   .rsv-wrap 의 padding-top(60) 이 담당하므로 0으로, 아래쪽(객실명~본문)은 시안 42px. */
+.rsv-wrap .section-title {
+  font-weight: 300;
+  letter-spacing: 0;
+  margin-top: 0;
+  margin-bottom: 42px; /* 시안 실측: 제목 ~ 본문(2단) */
+}
+
+/* ---------- 4. 본문 좌우 2단 ----------
+   시안: 1316 폭 안에서 [좌 700(큰 이미지+썸네일)] ⋯ [우 560(달력 패널)].
+   space-between 으로 좌측은 왼쪽 끝, 우측은 오른쪽 끝, 사이 간격은 자동
+   (700+560=1260, 남는 56px 이 사이 간격).
+   desc(.rsv-desc) 는 이 행 다음 형제(전체폭)로 margin-top 42px. */
+.rsv-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 56px; /* 시안의 사이 간격을 명시 */
+}
+.rsv-gallery {
+  flex: 1 1 700px; /* 700 기준, 좁아지면 줄어듦 */
+  min-width: 0; /* flex 자식 축소 허용 */
+}
+
+/* ---------- [좌] 객실 갤러리 ----------
+   시안 실측: 메인 700×700(정사각형, cover), 이미지~썸네일 18px, 썸네일 높이 100px.
+   (갭42 + main700 + thumbs margin18 + thumbs100 + desc42 = 902 → desc 가 제목 기준 902px) */
+/* 메인 슬라이드 컨테이너 (Swiper) */
+.rsv-gallery__main-swiper {
+  width: 100%;
+  max-width: 700px;
+  aspect-ratio: 1 / 1; /* 정사각형 비율 유지 */
+  margin-bottom: 18px; /* 메인 ~ 썸네일 간격 (기존 thumbs margin-top 18) */
+}
+/* 각 메인 슬라이드 (배경 이미지) */
+.rsv-gallery__slide {
+  background-size: cover;
+  background-position: center;
+  background-color: #ddd;
+}
+/* 썸네일 컨테이너 (Swiper) */
+.rsv-gallery__thumbs-swiper {
+  width: 100%;
+  max-width: 700px;
+  height: 100px;
+  margin-top: 18px;
+}
+/* 썸네일 슬라이드는 내용 폭만큼 (slidesPerView: auto) */
+.rsv-gallery__thumbs-swiper .swiper-slide {
+  width: 100px;
+  height: 100px;
+}
+/* 썸네일 하나 */
+.rsv-gallery__thumb {
+  width: 100px;
+  height: 100px;
+  background-size: cover;
+  background-position: center;
+  background-color: #ddd;
+  cursor: pointer;
+  opacity: 0.5; /* 비활성 흐리게 */
+  transition: opacity 0.2s;
+}
+/* 활성 썸네일 (Swiper thumbs 모듈이 자동 부여) */
+.rsv-gallery__thumbs-swiper .swiper-slide-thumb-active .rsv-gallery__thumb,
+.rsv-gallery__thumb.swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+/* 객실 설명(한/영) — 좌우 2단 아래 전체폭 별도 행. 2단(rsv-body) 다음 형제.
+   시안: 썸네일 ~ 설명 42px(여기서는 rsv-body 아래 margin-top 42px). */
+.rsv-desc {
+  margin-top: 42px; /* 시안 실측: 2단 ~ 설명 */
+}
+.rsv-desc__text {
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: #555;
+}
+.rsv-desc__text--eng {
+  color: #888;
+  font-size: 0.75rem;
+}
+
+/* ---------- [우] 예약 패널 ----------
+   시안: 560px 폭(달력 헤더 560×70 + 요일행 + 날짜그리드 + 추가인원/총합계/버튼).
+   세로 전체 높이 ≈ 700(좌측 이미지와 같은 높이). */
+.rsv-panel {
+  flex: 0 1 560px;
+  min-width: 0;
+  height: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+/* 버튼 행: 패널 맨 아래(margin-top:auto) → 하단 라인이 좌측 이미지(700) 하단과 일치.
+   내부 요소가 700 안에 들어오므로 flex 흐름으로 겹침 없이 배치. */
+.rsv-actions {
+  margin-top: auto;
+}
+
+/* ---------- 4-1. 달력 ----------
+   시안 실측: 전체 폭 560px, 3층 구조
+     1) 연월 헤더 560×70 (padding 16px 0, 배경 #FFF)
+     2) 요일 행   560×44
+     3) 날짜 그리드 560×360 (6주 × 60px)
+   셀: 7열 × 6행 = 80×60 (560÷7=80, 360÷6=60). padding 12px 0.
+   box-sizing 고정값 사용(common.css 에 box-sizing 선언 없음) */
+.cal {
+  width: 560px;
+  max-width: 100%; /* 좁은 화면에서는 축소 */
+}
+
+/* 1) 연월 헤더: 560×70. [‹][28px][2026년 07월][28px][›] 가로 중앙 배치. */
+.cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 화살표+타이틀 묶음을 중앙 */
+  gap: 28px; /* 화살표 ↔ 타이틀 좌우 각 28px(대칭) */
+  width: 560px;
+  max-width: 100%;
+  height: 70px;
+  padding: 16px 0;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+/* 좌우 화살표 버튼 — 안의 꺾쇠(.cal__chev)만 보이게 투명. */
+.cal__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+/* 비활성(이동 불가 방향): 클릭 차단. 색은 아래 .cal__chev 규칙이 회색으로 덮음. */
+.cal__nav:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 꺾쇠: border 로 그린 얇은 ‹ ›. 정사각형(8.5px)의 대각선 ≈ 12 → 시안 5×12 꺾쇠.
+   굵기 2px. 기본(이동 가능) 검정 #000. */
+.cal__chev {
+  display: block;
+  width: 8.5px;
+  height: 8.5px;
+  border-top: 2px solid #000000;
+  border-right: 2px solid #000000;
+}
+.cal__chev--left {
+  transform: rotate(-135deg); /* ‹ (왼쪽) */
+}
+.cal__chev--right {
+  transform: rotate(45deg); /* › (오른쪽) */
+}
+/* 비활성 방향의 꺾쇠는 회색 #D8D8D8 (부모 button:disabled 기준) */
+.cal__nav:disabled .cal__chev {
+  border-top-color: #d8d8d8;
+  border-right-color: #d8d8d8;
+}
+
+.cal__title {
+  font-size: 16px; /* 시안 실측 */
+  font-weight: 500; /* KOROAD Medium */
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+  min-width: 90px; /* 시안 ~90px → 좌우 화살표와 대칭 유지 */
+}
+
+/* 2) 요일 행: 560×44, 셀 80×40 (padding 21px 0). 위쪽 회색 선. */
+.cal__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 560px;
+  max-width: 100%;
+  height: 44px;
+  text-align: center;
+  box-sizing: border-box;
+  border-top: 1px solid #d8d8d8; /* 시안: 요일행 위 회색 선 */
+}
+.cal__wd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: 40px;
+  padding: 21px 0;
+  box-sizing: border-box;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #1a1a1a; /* 월~토 검정 */
+}
+.cal__wd--sun {
+  color: #d33; /* 일요일 빨강 */
+}
+.cal__wd--sat {
+  color: #1a1a1a; /* 토요일 검정 (시안) */
+}
+
+/* 3) 날짜 그리드: 560×360 (7열 × 6행).
+   하단 회색 선은 그리드 외곽(border-bottom)이 아니라
+   마지막 줄 셀(.cal__cell--last)에 직접 부여한다(요일행 위 선과 동일 색).
+   → 중간 셀 사이 선은 없고, 오직 그리드 최하단 한 줄만 선. */
+.cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 560px;
+  max-width: 100%;
+  height: 360px;
+  box-sizing: border-box;
+}
+
+/* 날짜 셀 — 80×60, padding 12px 0, flex column 중앙 정렬
+   gap(숫자↔라벨) 기본 10px. 선택 셀은 .cal__cell--selected 에서 2px로 좁힘.
+   시안: 개별 셀 테두리 없음(그리드 맨 아래 한 줄만 선). */
+.cal__cell {
+  position: relative;
+  width: auto;
+  aspect-ratio: 4 / 3;
+  height: 60px;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 300; /* KOROAD Light */
+  line-height: 1;
+  letter-spacing: 0;
+  color: #1a1a1a; /* default 검정 */
+  cursor: pointer;
+  user-select: none;
+  background: #ffffff; /* default/none/holiday/end 모두 흰 배경 */
+  box-sizing: border-box;
+  overflow: hidden; /* 긴 공휴일 이름이 셀을 넘치지 않게 */
+}
+
+/* 마지막 줄(6번째 행) 셀 전용 하단 선.
+   요일행 위 선(.cal__weekdays border-top)과 동일한 회색, 동일 두께.
+   중간 셀은 border 없음 → 셀 사이 선이 생기지 않는다. */
+.cal__cell--last {
+  border-bottom: 1px solid #d8d8d8;
+}
+
+/* 셀 라벨(입실/퇴실/예약완료) — ~9~10px, weight 300 */
+.cal__cell-label {
+  font-size: 9px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* 공휴일 이름 — ~9~10px, 빨강(날짜 숫자와 동일), 셀 안에서 줄바꿈/잘림 */
+.cal__cell-label--holiday {
+  width: 90%; /* 셀 폭 안에서 줄바꿈 */
+  text-align: center;
+  font-size: 9px;
+  font-weight: 300;
+  line-height: 1.1;
+  color: #d33; /* 빨강 (날짜 숫자와 동일) */
+  word-break: keep-all; /* 한글은 어절 단위로 */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 최대 2줄까지만, 초과 시 말줄임 */
+  -webkit-box-orient: vertical;
+}
+
+/* 다른 달 날짜(other) — 다음 달 앞부분 등. 오늘 이후면 정상 표시 + 선택 가능.
+   (회색 흐림은 오직 오늘 이전 --past 에만 적용) */
+.cal__cell--other {
+  background: #ffffff;
+  color: #1a1a1a; /* 정상 검정 — 흐리지 않음 */
+  cursor: pointer;
+}
+
+/* 일요일(holiday 포함) 숫자 빨강 — 흰 배경 유지. */
+.cal__cell--sun {
+  color: #d33;
+}
+
+/* 오늘 이전(past) — 배경 흰색, 글자 흐리게, 클릭 불가.
+   sun(빨강)보다 뒤에 선언해 같은 구체성에서 past 흐림이 우선:
+   지난 일요일/공휴일도 흐린 회색으로 표시. */
+.cal__cell--past {
+  background: #ffffff;
+  color: #ccc;
+  cursor: default;
+}
+
+/* 예약완료(booked) — 배경 흰색, 클릭 불가.
+   숫자는 지난 날짜(--past)와 동일한 흐린 회색 #ccc.
+   "예약완료" 라벨만 빨강 #FF635E. */
+.cal__cell--booked {
+  background: #ffffff;
+  color: #ccc; /* 숫자: 지난 날짜 흐림과 동일 */
+  cursor: not-allowed;
+}
+.cal__cell--booked .cal__cell-label {
+  color: #ff635e; /* 시안: 예약완료 라벨 빨강 */
+  font-size: 12px; /* 시안 실측 */
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+/* 선택 셀 (select start / select / select end) — 밝은 초록 #30BD5E.
+   gap 2px로 좁혀 숫자·라벨을 가깝게.
+   구체성(0,2,0)으로 .cal__cell--sun/.--booked(0,1,0)보다 항상 우선 →
+   일요일·공휴일 빨강보다 흰색이 무조건 이긴다. */
+.cal__cell--selected,
+.cal__cell--range {
+  background: var(--select);
+  color: #fff;
+  gap: 2px;
+}
+.cal__cell--selected.cal__cell--sun,
+.cal__cell--range.cal__cell--sun {
+  color: #fff;
+}
+.cal__cell--selected .cal__cell-label,
+.cal__cell--range .cal__cell-label {
+  color: #fff;
+}
+
+/* ---------- 4-2. 추가 인원 ----------
+   시안: 달력과 분리된 별도 행. 박스 560×65, 위·아래 1px #D8D8D8 선,
+   padding 12px 20px. [좌: 라벨+select][우: 안내문구] space-between. */
+.rsv-extra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 560px;
+  height: 65px;
+  padding: 12px 20px;
+  border-top: 1px solid #d8d8d8;
+  border-bottom: 1px solid #d8d8d8;
+  box-sizing: border-box;
+  margin-right: 96px; /* 시안: 우 96 (상하 margin은 패널 세로 정렬 확보를 위해 제거 → gap이 담당) */
+}
+/* 왼쪽 그룹: 라벨 + select (간격 25px) */
+.rsv-extra__left {
+  display: flex;
+  align-items: center;
+  gap: 25px; /* 시안: 라벨 ~ select */
+}
+.rsv-extra__label {
+  font-size: 14px; /* 시안 실측 */
+  font-weight: 300; /* Light */
+  letter-spacing: 0;
+}
+.rsv-extra__select {
+  width: 83px; /* 시안 실측 */
+  height: 30px; /* 시안 실측 */
+  padding: 3px 5px 3px 15px; /* 시안 실측 */
+  border: 0.5px solid #d8d8d8;
+  background-color: #fff;
+  /* 기본 화살표 제거 + 커스텀 회색 삼각형(약 10×5)을 오른쪽에 */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='5' viewBox='0 0 10 5'><polygon points='0,0 10,0 5,5' fill='%23D8D8D8'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 5px center;
+  font-size: 14px; /* 시안 실측 */
+  font-weight: 300;
+  letter-spacing: 0;
+  color: #1a1a1a;
+  cursor: pointer;
+}
+.rsv-extra__hint {
+  font-size: 14px; /* 시안 실측 */
+  font-weight: 300; /* Light */
+  letter-spacing: 0;
+  color: #1a1a1a;
+}
+
+/* ---------- 4-3. 총 합계 ----------
+   시안: 560×40, [좌: "총 합계"][우: 금액+원] space-between, padding 0 25px.
+   위쪽 회색 선 없음(시안에 없음). 날짜 미선택 시 0원. */
+.rsv-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 560px;
+  height: 40px;
+  padding: 0 25px;
+  box-sizing: border-box;
+}
+.rsv-total__label {
+  font-size: 14px; /* 시안 실측 */
+  font-weight: 300; /* Light */
+  letter-spacing: 0;
+}
+.rsv-total__right {
+  display: flex;
+  align-items: baseline;
+  gap: 10px; /* 시안: 숫자 ~ "원" */
+}
+.rsv-total__amount {
+  font-size: 20px; /* 시안 실측 */
+  font-weight: 500; /* Medium */
+  letter-spacing: -0.03em;
+}
+.rsv-total__unit {
+  font-size: 14px; /* 시안 실측 */
+  font-weight: 300;
+  letter-spacing: 0;
+}
+
+/* ---------- 4-4. 버튼 2개 ----------
+   시안: 560×51, [취소 270×50][예약하기 270×50], gap 20px. */
+.rsv-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* 시안: 두 버튼 간격 */
+  width: 100%;
+  max-width: 560px;
+  height: 51px;
+  box-sizing: border-box;
+}
+.rsv-btn {
+  width: 270px;
+  height: 50px;
+  padding: 15px 25px; /* 시안 실측 */
+  box-sizing: border-box;
+  font-size: 14px; /* 시안 실측 */
+  font-weight: 300; /* Light */
+  letter-spacing: 0;
+  cursor: pointer;
+}
+/* 취소: 흰 배경, 1px #D8D8D8 border */
+.rsv-btn--cancel {
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  color: #1a1a1a;
+}
+/* 예약하기: 비활성 #818181 회색 / 활성(is-active) 검정 #000 */
+.rsv-btn--submit {
+  background: #818181;
+  border: none;
+  color: #fff;
+  cursor: not-allowed;
+}
+.rsv-btn--submit.is-active {
+  background: #000000;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ---------- 안내 모달 ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal[hidden] {
+  display: none;
+}
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal__box {
+  position: relative;
+  background: #fff;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  border-radius: 2px;
+  min-width: 280px;
+}
+.modal__text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+.modal__ok {
+  padding: 0.6rem 2rem;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ============================================================
+   반응형 (<= 1000px) : 좌우 2단 → 세로 1단
+   ============================================================ */
+@media (max-width: 1000px) {
+  .rsv-wrap {
+    padding: 60px var(--content-gutter) 60px;
+    display: flex;
+    flex-direction: column;
+  }
+  .rsv-body {
+    display: contents; /* body를 투명하게 → 자식이 rsv-wrap 직속처럼 */
+  }
+  .rsv-wrap .section-title {
+    order: 0;
+  } /* 객실명 */
+  .rsv-gallery {
+    order: 1;
+  } /* 사진 */
+  .rsv-desc {
+    order: 2;
+  } /* 설명 ← 사진 밑 */
+  .rsv-panel {
+    order: 3;
+  } /* 달력+버튼 */
+  .rsv-gallery {
+    width: 100%;
+    flex: none; /* 데스크톱 flex:1 1 700px 해제 */
+    height: auto; /* 혹시 높이 잡는 것 해제 */
+  }
+  .rsv-gallery__main-swiper {
+    max-width: 100%; /* 모바일: 700 상한 풀어 화면 꽉 채움 */
+  }
+  .rsv-gallery__thumbs-swiper {
+    max-width: 100%;
+  }
+  .rsv-panel {
+    width: 100%;
+    height: auto;
+    flex: none; /* 데스크톱 flex:0 1 560px 해제 */
+    margin-top: 2rem; /* desc ~ 패널 간격 */
+  }
+  .rsv-extra,
+  .rsv-total,
+  .rsv-actions {
+    margin-top: 1.5rem;
+    width: 100%;
+    height: auto; /* 51px 고정도 풀어줌 */
+  }
+  .rsv-extra {
+    margin-right: 0; /* 데스크톱 우측 여백 제거 */
+    flex-direction: column; /* 좁으면 라벨+select 위, 힌트 아래로 */
+    align-items: flex-start;
+    gap: 8px;
+    height: auto; /* 65px 고정 해제 */
+  }
+  .rsv-extra__hint {
+    font-size: 13px;
+  }
+  .rsv-btn {
+    flex: 1; /* 두 버튼이 남은 폭을 똑같이 나눠 가짐 */
+    width: auto; /* 270px·50% 고정 해제 */
+  }
+  .rsv-desc {
+    width: 100%;
+    margin-top: 2rem; /* 사진 ~ 설명 간격 (데스크톱 42px보다 좁게) */
+  }
+  /* 달력: 560px 고정폭을 풀고 화면 폭에 맞춰 7열로 축소.
+     셀 폭은 calc(100% / 7), 높이·폰트도 비례 축소. */
+  .cal,
+  .cal__head,
+  .cal__weekdays,
+  .cal__grid {
+    width: 100%;
+  }
+  .cal__weekdays {
+    grid-template-columns: repeat(7, calc(100% / 7));
+    height: auto;
+  }
+  .cal__wd {
+    width: auto;
+    height: auto;
+    padding: 2.5% 0;
+    font-size: 3vw;
+  }
+  .cal__grid {
+    grid-template-columns: repeat(7, calc(100% / 7));
+    height: auto;
+  }
+  .cal__cell {
+    width: auto;
+    height: auto;
+    aspect-ratio: 4 / 3; /* 80×60 비율 유지 */
+    padding: 1.5% 0;
+    font-size: 3vw;
+    gap: 1vw;
+  }
+  .cal__cell--selected,
+  .cal__cell--range {
+    gap: 0.3vw;
+  }
+}

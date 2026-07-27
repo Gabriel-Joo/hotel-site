@@ -1,0 +1,285 @@
+/* ============================================================
+   reservation-form.css  —  예약등록 페이지 전용
+   (타이틀 배너는 common.css .title-banner 공통.
+    달력 .cal* 시안은 reservation.css 를 그대로 재사용 — 본 페이지에선
+    별도로 달력 스타일을 새로 정의하지 않는다. 단 .cal__cell--readonly
+    보정만 이 페이지 고유.)
+   ============================================================ */
+
+/* 본문 실제 폭 1316px(시안 콘텐츠 영역), 가운데 정렬 (.content 1440 안에서).
+   .content 의 gutter 가 바깥에서 좌우 여백을 잡으므로 form-wrap 자체엔
+   좌우 padding 을 두지 않는다(reservation-info.css 의 .info-wrap 과 동일 패턴). */
+.form-wrap {
+  max-width: 1316px;
+  margin: 0 auto;
+}
+
+/* ---------- 3. 섹션 제목 "예약 등록" ----------
+   공통 .section-title(Bold 700 / -3%)을 이 페이지에서만 시안값으로 덮는다.
+   font-size 30px, text-align center 는 공통값과 동일 → 유지.
+   위치(콘텐츠 영역 기준): 상 60(배너~타이틀). 본문은 타이틀 기준 아래 40에서 시작. */
+.form-wrap .section-title {
+  font-weight: 300; /* KOROAD Light */
+  line-height: 1; /* 100% */
+  letter-spacing: 0;
+  margin: 60px 0 42px; /* 상 60(배너~타이틀) / 하 42(타이틀~본문) */
+}
+
+/* ---------- 4. 본문 좌우 2단 ----------
+   타이틀(.section-title 의 margin-bottom 60) 아래서 시작.
+   시안 실측: 좌 폼 726 / 우 달력 560 / 둘 사이 gap 34.
+   (726 + 34 + 560 = 1320 ≈ 콘텐츠 영역 1316) */
+.form-body {
+  display: grid;
+  grid-template-columns: minmax(0, 726px) minmax(0, 560px);
+  gap: 34px;
+  align-items: start;
+}
+
+/* ---------- [좌] 입력 폼 ----------
+   시안 실측: width 726(grid column 고정) / height 507 / padding-top 75 /
+   padding-bottom 50 / 행 간 gap 10. */
+.form-fields {
+  width: 100%;      /* 726px → 100% (컬럼 따라감) */
+  min-height: 507px;
+  padding-top: 75px;
+  padding-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---------- [우] 달력 (읽기 전용) ----------
+   시안 실측: width 560(=달력 .cal 고정폭) / height 507. 달력 자체는 상단 정렬.
+   grid column(560px) 안에서 가운데 정렬. */
+.form-cal {
+  width: 100%;      /* 560px → 100% */
+  max-width: 560px;
+  min-height: 507px;
+  display: flex;
+  justify-content: center;
+}
+
+/* 행: 라벨(좌) + 필드(우) */
+.form-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: start;
+  gap: 1rem;
+}
+/* 입실/퇴실: 데스크톱은 캘린더로 고르니 숨김 (모바일에서만 표시) */
+.form-row--date {
+  display: none;
+}
+.form-row__label {
+  padding-top: 0.85rem; /* 입력필드 텍스트와 정렬 */
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.form-row__field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row__input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  font-size: 0.95rem;
+  border: 1px solid #ccc; /* 입력: 흰 배경 + 얇은 테두리 */
+  background: #fff;
+  /* font: inherit(reset.css) 로 KOROAD 상속 */
+}
+
+/* readonly 두 필드: 회색 배경, 테두리 없음, 수정 불가 */
+.form-row__input--readonly {
+  background: #eeeeee;
+  border: none;
+  color: #555;
+  cursor: default;
+}
+
+/* 유효성 실패: 필드 테두리 빨강 */
+.form-row__input.is-invalid {
+  border-color: #d33;
+}
+
+/* 에러 메시지 */
+.form-row__error {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: #d33;
+}
+.form-row__error[hidden] {
+  display: none;
+}
+
+/* ---------- 총 합계 ---------- */
+.form-total {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+.form-total__label {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.form-total__amount {
+  margin-left: auto;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.form-total__unit {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* ---------- [우] 달력 (읽기 전용) ----------
+   달력의 마크업·스타일은 실시간예약(reservation.html)과 100% 동일하게
+   재사용한다. 본 페이지는 reservation.css(<link>)에서 .cal* 시안값을
+   그대로 가져오며, 여기엔 별도로 달력 스타일을 새로 정의하지 않는다.
+   이 페이지만의 보정은 아래 .cal__cell--readonly(커서 기본) 한 가지. */
+/* 읽기 전용: 커서 기본, 클릭 차단(pointer-events:none) — view-only 보장.
+   (화살표 비활성 회색은 reservation.css 의 .cal__nav:disabled/.cal__chev 규칙 사용) */
+.cal__cell--readonly {
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ---------- 5. 버튼 2개 (본문 아래) ----------
+   시안 실측(콘텐츠 영역 1316 기준): 좌우 429 → 버튼 영역 폭 = 1316-429*2 = 458,
+   가운데 정렬. 취소·예약하기 gap 42. 하단에서 60 위. */
+.form-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 42px;
+  width: 458px;
+  margin: 0 auto 60px; /* 가운데 정렬(=좌우 429) + 하단 60 */
+}
+.rsv-btn {
+  height: 52px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.rsv-btn--cancel {
+  background: #fff;
+  border: 1px solid #1a1a1a;
+  color: #1a1a1a;
+}
+.rsv-btn--submit {
+  background: #1a1a1a;
+  border: 1px solid #1a1a1a;
+  color: #fff;
+}
+
+/* ---------- 안내 모달 ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal[hidden] {
+  display: none;
+}
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal__box {
+  position: relative;
+  background: #fff;
+  padding: 2rem 2.5rem;
+  text-align: center;
+  min-width: 280px;
+}
+.modal__text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+.modal__ok {
+  padding: 0.6rem 2rem;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ============================================================
+   반응형 (<= 1000px) : 좌우 2단 → 세로 1단
+   ============================================================ */
+@media (max-width: 1000px) {
+  .form-wrap {
+    padding-left: var(--content-gutter);
+    padding-right: var(--content-gutter);
+  }
+  .form-body {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  /* 데스크톱 고정폭(726/560/458) 해제 → 화면 폭에 맞춤 */
+  .form-fields,
+  .form-cal {
+    width: 100%;
+    min-height: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  /* 모바일: 캘린더 숨기고 입실/퇴실 텍스트 필드 표시 */
+  .form-cal {
+    display: none;
+  }
+  .form-row--date {
+    display: grid; /* 다른 form-row와 동일하게 (120px + 1fr) */
+  }
+  .form-actions {
+    width: 100%;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  /* 달력: 560px 고정폭을 풀고 화면 폭에 맞춰 7열로 축소.
+     셀 폭 calc(100% / 7), 높이·폰트 비례 축소. */
+  .cal,
+  .cal__head,
+  .cal__weekdays,
+  .cal__grid {
+    width: 100%;
+  }
+  .cal__weekdays {
+    grid-template-columns: repeat(7, calc(100% / 7));
+    height: auto;
+  }
+  .cal__wd {
+    width: auto;
+    height: auto;
+    padding: 2.5% 0;
+    font-size: 3vw;
+  }
+  .cal__grid {
+    grid-template-columns: repeat(7, calc(100% / 7));
+    height: auto;
+  }
+  .cal__cell {
+    width: auto;
+    height: auto;
+    aspect-ratio: 4 / 3; /* 80×60 비율 유지 */
+    padding: 1.5% 0;
+    font-size: 3vw;
+    gap: 1vw;
+  }
+  .cal__cell--selected,
+  .cal__cell--range {
+    gap: 0.3vw;
+  }
+}

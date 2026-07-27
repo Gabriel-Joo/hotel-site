@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOTEL — 객실</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/common.css" />
+    <link rel="stylesheet" href="./css/rooms.css" />
+    <!-- 반응형(<=1000px)은 페이지 CSS "다음에" 로드되어야 모바일 규칙이 이김 -->
+    <link rel="stylesheet" href="./css/responsive.css" />
+    <!-- Font Awesome (CDN, 아이콘: 공통 푸터 SNS 등) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- 헤더 (Web Component: common.js가 <my-header> 정의) -->
+    <my-header></my-header>
+
+    <!-- 타이틀 배너 = 전체폭 이미지 위에 페이지 제목 (헤더·배너는 전체폭 유지) -->
+    <section class="title-banner">
+      <div class="title-banner__inner">
+        <h1 class="title-banner__title">ROOMS</h1>
+        <!-- TODO: 시안 배경 이미지/높이/정렬 적용 -->
+      </div>
+    </section>
+
+    <!--
+      객실 content 영역 (TODO: 시안 확정 후 구현)
+      - 헤더·타이틀 배너·푸터를 제외한 content 영역만 max-width 1440px 가운데 정렬.
+    -->
+    <main>
+      <div class="content">
+        <!-- TODO: 객실 목록/필터/상세 — getRooms() 결과 렌더링 (js/rooms.js) -->
+      </div>
+    </main>
+
+    <!-- 푸터 (Web Component) + 맨 위로 버튼 (Web Component) -->
+    <my-footer></my-footer>
+
+    <to-the-top></to-the-top>
+
+    <script type="module" src="./js/common.js"></script>
+    <script type="module" src="./js/rooms.js"></script>
+  </body>
+</html>

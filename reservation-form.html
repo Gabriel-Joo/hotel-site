@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOTEL — 예약등록</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/common.css" />
+    <!-- 달력(.cal*) 시안은 실시간예약과 동일하게 reservation.css에서 재사용 -->
+    <link rel="stylesheet" href="./css/reservation.css" />
+    <link rel="stylesheet" href="./css/reservation-form.css" />
+    <!-- 반응형(<=1000px)은 페이지 CSS "다음에" 로드되어야 모바일 규칙이 이김 -->
+    <link rel="stylesheet" href="./css/responsive.css" />
+    <!-- Font Awesome (CDN, 아이콘: 공통 푸터 SNS 등) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- 헤더 (Web Component: common.js가 <my-header> 정의) -->
+    <my-header></my-header>
+
+    <!-- 2. 타이틀 배너 — 전체폭 (공통 .title-banner + 배경이미지 인라인) -->
+    <section
+      class="title-banner"
+      style="background-image: url(&quot;./images/banner_reservation.jpg&quot;)"
+    >
+      <div class="title-banner__inner">
+        <h1 class="title-banner__title">RESERVATION</h1>
+        <p class="title-banner__subtitle">실시간예약</p>
+      </div>
+    </section>
+
+    <!-- 3 ~ 5. 본문 -->
+    <main>
+      <div class="content">
+        <div class="form-wrap">
+          <!-- 3. 섹션 제목 -->
+          <h2 class="section-title">예약 등록</h2>
+
+          <!-- 4. 본문 좌우 2단 -->
+          <div class="form-body">
+            <!-- [좌] 입력 폼 + 총 합계 -->
+            <section class="form-fields">
+              <!-- ROOM (readonly) -->
+              <div class="form-row">
+                <label class="form-row__label" for="f-room">ROOM</label>
+                <input
+                  class="form-row__input form-row__input--readonly"
+                  id="f-room"
+                  type="text"
+                  readonly
+                />
+              </div>
+
+              <!-- 추가인원 (readonly) -->
+              <div class="form-row">
+                <label class="form-row__label" for="f-extra">추가인원</label>
+                <input
+                  class="form-row__input form-row__input--readonly"
+                  id="f-extra"
+                  type="text"
+                  readonly
+                />
+              </div>
+              <!-- 입실 (readonly, 모바일에서만 표시) -->
+              <div class="form-row form-row--date">
+                <label class="form-row__label" for="f-checkin">입실</label>
+                <input
+                  class="form-row__input form-row__input--readonly"
+                  id="f-checkin"
+                  type="text"
+                  readonly
+                />
+              </div>
+              <!-- 퇴실 (readonly, 모바일에서만 표시) -->
+              <div class="form-row form-row--date">
+                <label class="form-row__label" for="f-checkout">퇴실</label>
+                <input
+                  class="form-row__input form-row__input--readonly"
+                  id="f-checkout"
+                  type="text"
+                  readonly
+                />
+              </div>
+
+              <!-- 예약명 (입력) -->
+              <div class="form-row">
+                <label class="form-row__label" for="f-name">예약명</label>
+                <div class="form-row__field">
+                  <input
+                    class="form-row__input"
+                    id="f-name"
+                    type="text"
+                    placeholder="예약명을 입력해 주세요."
+                    autocomplete="off"
+                  />
+                  <p class="form-row__error" id="f-name-error" hidden>
+                    필수 입력 값입니다.
+                  </p>
+                </div>
+              </div>
+
+              <!-- 전화번호 (입력) -->
+              <div class="form-row">
+                <label class="form-row__label" for="f-phone">전화번호</label>
+                <div class="form-row__field">
+                  <input
+                    class="form-row__input"
+                    id="f-phone"
+                    type="tel"
+                    inputmode="numeric"
+                    placeholder="-를 제외하고 입력해 주세요."
+                    autocomplete="off"
+                  />
+                  <p class="form-row__error" id="f-phone-error" hidden>
+                    필수 입력 값입니다.
+                  </p>
+                </div>
+              </div>
+
+              <!-- 총 합계 -->
+              <div class="form-total">
+                <span class="form-total__label">총 합계</span>
+                <span class="form-total__amount" id="total-amount">0</span>
+                <span class="form-total__unit">원</span>
+              </div>
+            </section>
+
+            <!-- [우] 달력 (읽기 전용: 실시간예약 달력과 동일 마크업, 인터랙션만 off) -->
+            <section class="form-cal">
+              <div class="cal">
+                <div class="cal__head">
+                  <button
+                    type="button"
+                    class="cal__nav"
+                    id="cal-prev"
+                    aria-label="이전 달"
+                  >
+                    <span
+                      class="cal__chev cal__chev--left"
+                      aria-hidden="true"
+                    ></span>
+                  </button>
+                  <span class="cal__title" id="cal-title"></span>
+                  <button
+                    type="button"
+                    class="cal__nav"
+                    id="cal-next"
+                    aria-label="다음 달"
+                  >
+                    <span
+                      class="cal__chev cal__chev--right"
+                      aria-hidden="true"
+                    ></span>
+                  </button>
+                </div>
+                <div class="cal__weekdays">
+                  <span class="cal__wd cal__wd--sun">일</span>
+                  <span class="cal__wd">월</span>
+                  <span class="cal__wd">화</span>
+                  <span class="cal__wd">수</span>
+                  <span class="cal__wd">목</span>
+                  <span class="cal__wd">금</span>
+                  <span class="cal__wd cal__wd--sat">토</span>
+                </div>
+                <div class="cal__grid" id="cal-grid"></div>
+              </div>
+            </section>
+          </div>
+
+          <!-- 5. 버튼 2개 -->
+          <div class="form-actions">
+            <button
+              type="button"
+              class="rsv-btn rsv-btn--cancel"
+              id="btn-cancel"
+            >
+              취소
+            </button>
+            <button
+              type="button"
+              class="rsv-btn rsv-btn--submit is-active"
+              id="btn-submit"
+            >
+              예약하기
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 안내 모달 -->
+    <div class="modal" id="alert-modal" hidden>
+      <div class="modal__backdrop"></div>
+      <div class="modal__box" role="alertdialog" aria-modal="true">
+        <p class="modal__text" id="alert-text"></p>
+        <button type="button" class="modal__ok" id="alert-ok">확인</button>
+      </div>
+    </div>
+
+    <!-- 푸터 (Web Component) + 맨 위로 버튼 (Web Component) -->
+    <my-footer></my-footer>
+
+    <to-the-top></to-the-top>
+
+    <script type="module" src="./js/common.js"></script>
+    <script type="module" src="./js/reservation-form.js"></script>
+  </body>
+</html>

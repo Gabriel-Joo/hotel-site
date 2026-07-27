@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOTEL — 메인</title>
+    <!-- 공통 스타일 -->
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/common.css" />
+    <!-- 페이지별 (메인): 전체 화면 width 설계 -->
+    <link rel="stylesheet" href="./css/main.css" />
+    <!-- 반응형(<=1000px)은 페이지 CSS "다음에" 로드되어야 모바일 규칙이 이김 -->
+    <link rel="stylesheet" href="./css/responsive.css" />
+    <!-- swiper CSS (CDN) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <!-- Font Awesome (CDN, 아이콘: swiper와 함께 예외 허용) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- 헤더 (Web Component: common.js가 <my-header> 정의) -->
+    <my-header></my-header>
+
+    <!--
+      메인 본문: 전체 화면 width (.content 1440 제약 없음).
+      각 섹션 내부만 별도 좌우 여백으로 가운데 정렬.
+    -->
+    <main class="home">
+      <!-- 2. 히어로 슬라이드 (swiper, 전체폭) -->
+      <section class="hero">
+        <div class="swiper hero__swiper">
+          <div class="swiper-wrapper">
+            <!-- 슬라이드 3장. 카피는 슬라이드마다 상이, 버튼은 3장 모두 동일. -->
+            <div class="swiper-slide hero__slide" style="background-image: url('./images/main_visual_1.jpg')">
+              <div class="hero__overlay"></div>
+              <div class="hero__copy">
+                <p class="hero__title">SWEET MOMENT</p>
+                <a href="./rooms.html" class="hero__btn">SEE MORE</a>
+              </div>
+            </div>
+            <div class="swiper-slide hero__slide" style="background-image: url('./images/main_visual_2.jpg')">
+              <div class="hero__overlay"></div>
+              <div class="hero__copy">
+                <p class="hero__title">URBAN RESORT</p>
+                <a href="./rooms.html" class="hero__btn">SEE MORE</a>
+              </div>
+            </div>
+            <div class="swiper-slide hero__slide" style="background-image: url('./images/main_visual_3.jpg')">
+              <div class="hero__overlay"></div>
+              <div class="hero__copy">
+                <p class="hero__title">RELAX & RELIEF</p>
+                <a href="./rooms.html" class="hero__btn">SEE MORE</a>
+              </div>
+            </div>
+          </div>
+          <!-- 페이지네이션 점 (하단 중앙, 흰색) -->
+          <div class="swiper-pagination hero__pagination"></div>
+        </div>
+      </section>
+
+      <!-- 3. ROOMS 섹션 (전체폭 흐름, 좌측은 content 정렬선) -->
+      <section class="rooms section-rhythm">
+        <h2 class="section-title">ROOMS</h2>
+        <div class="slide-wrap rooms__swiper-wrap">
+          <div class="swiper rooms__swiper">
+            <div class="swiper-wrapper" id="rooms-wrapper">
+              <!-- js/main.js 가 getRooms() 로 카드 렌더 -->
+            </div>
+          </div>
+        </div>
+        <!-- 데이터/렌더 에러 메시지 자리 -->
+        <p class="rooms__error" id="rooms-error" hidden></p>
+      </section>
+
+      <!-- 4. EVENT 섹션 (ROOMS 와 동일한 swiper 슬라이드 구조) -->
+      <section class="event section-rhythm">
+        <h2 class="section-title">EVENT</h2>
+        <div class="slide-wrap event__swiper-wrap">
+          <div class="swiper event__swiper">
+            <div class="swiper-wrapper" id="event-wrapper"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. 2024 BEST HOTEL 배너 (전체폭) -->
+      <section class="best">
+        <div class="best__overlay"></div>
+        <div class="best__inner">
+          <!-- 메달 아이콘 (Font Awesome) -->
+          <i class="fa-solid fa-medal best__icon" aria-hidden="true"></i>
+          <p class="best__title">2024 BEST HOTEL</p>
+          <p class="best__text">
+            Can one ever remember love<br />
+            Its like trying to summon up<br />
+            the smell of rose sin a cellar.<br />
+            you might see a rose, but never the perfume.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- 푸터 (Web Component) + 맨 위로 버튼 (Web Component) -->
+    <my-footer></my-footer>
+
+    <to-the-top></to-the-top>
+
+    <!-- swiper JS (CDN, 전역 Swiper 노출) -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- 공통 스크립트 (module): Web Components 정의 + common:ready 신호 -->
+    <script type="module" src="./js/common.js"></script>
+    <!-- 메인 페이지 스크립트 -->
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>

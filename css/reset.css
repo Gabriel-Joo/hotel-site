@@ -1,0 +1,195 @@
+/* ============================================================
+   reset.css  —  브라우저 기본 스타일 정규화
+   (퍼블리싱 과제 공통 리셋. 디자인 시안 확정 전 기본값)
+   ============================================================ */
+
+/* box-sizing을 border-box로 통일 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 기본 마진/패딩 제거 */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 시맨틱 요소 block 처리 */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+/* html 루트 */
+html {
+  font-size: 16px; /* TODO: 시안 확정 후 루트 폰트 사이즈/line-height 확정 */
+  line-height: 1.5;
+  scroll-behavior: smooth; /* to-the-top 등 부드러운 스크롤 (300ms ease-in-out) */
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* body */
+body {
+  min-height: 100vh;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 리스트 스타일 제거 */
+ol,
+ul {
+  list-style: none;
+}
+
+/* 링크 기본 스타일 제거(색상은 common.css :root 변수로 제어) */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 이미지/영상 반응형 기본값 */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* 폼 요소 폰트 상속 */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+}
+
+/* 버튼 기본 스타일 제거 */
+button {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* 표 border-collapse */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* strong/b, em/i는 남김(시맨틱) */
+strong,
+b {
+  font-weight: bold;
+}
+
+/* 숨김 처리용 유틸(sr-only) — 접근성 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

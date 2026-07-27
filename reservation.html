@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HOTEL — 실시간예약</title>
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/common.css" />
+    <link rel="stylesheet" href="./css/reservation.css" />
+    <!-- 반응형(<=1000px)은 페이지 CSS "다음에" 로드되어야 모바일 규칙이 이김 -->
+    <link rel="stylesheet" href="./css/responsive.css" />
+    <!-- Font Awesome (CDN, 아이콘: 공통 푸터 SNS 등) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+  </head>
+  <body>
+    <!-- 헤더 (Web Component: common.js가 <my-header> 정의) -->
+    <my-header></my-header>
+
+    <!-- 2. 타이틀 배너 — 전체폭 (공통 .title-banner + 배경이미지 인라인) -->
+    <section
+      class="title-banner"
+      style="background-image: url(&quot;./images/banner_reservation.jpg&quot;)"
+    >
+      <div class="title-banner__inner">
+        <h1 class="title-banner__title">RESERVATION</h1>
+        <p class="title-banner__subtitle">실시간예약</p>
+      </div>
+    </section>
+
+    <!-- 3 ~ 4. 본문: content(1440) 안에서 실제폭 ~1180 가운데 정렬 -->
+    <main>
+      <div class="content">
+        <div class="rsv-wrap">
+          <!-- 3. 객실명 (대문자) — js가 채움 -->
+          <h2 class="section-title" id="room-name"></h2>
+
+          <!-- 4. 본문 좌우 2단 -->
+          <div class="rsv-body">
+            <!-- [좌] 객실 이미지 -->
+            <section class="rsv-gallery">
+              <!-- 메인 슬라이드 -->
+              <div class="swiper rsv-gallery__main-swiper" id="gallery-main">
+                <div class="swiper-wrapper"></div>
+              </div>
+              <!-- 썸네일 슬라이드 -->
+              <div
+                class="swiper rsv-gallery__thumbs-swiper"
+                id="gallery-thumbs"
+              >
+                <div class="swiper-wrapper"></div>
+              </div>
+            </section>
+
+            <!-- [우] 예약 패널 -->
+            <section class="rsv-panel">
+              <!-- 4-1. 달력 -->
+              <div class="cal">
+                <div class="cal__head">
+                  <button
+                    type="button"
+                    class="cal__nav"
+                    id="cal-prev"
+                    aria-label="이전 달"
+                  >
+                    <span
+                      class="cal__chev cal__chev--left"
+                      aria-hidden="true"
+                    ></span>
+                  </button>
+                  <span class="cal__title" id="cal-title"></span>
+                  <button
+                    type="button"
+                    class="cal__nav"
+                    id="cal-next"
+                    aria-label="다음 달"
+                  >
+                    <span
+                      class="cal__chev cal__chev--right"
+                      aria-hidden="true"
+                    ></span>
+                  </button>
+                </div>
+                <div class="cal__weekdays">
+                  <span class="cal__wd cal__wd--sun">일</span>
+                  <span class="cal__wd">월</span>
+                  <span class="cal__wd">화</span>
+                  <span class="cal__wd">수</span>
+                  <span class="cal__wd">목</span>
+                  <span class="cal__wd">금</span>
+                  <span class="cal__wd cal__wd--sat">토</span>
+                </div>
+                <div class="cal__grid" id="cal-grid">
+                  <!-- js 가 날짜 셀 렌더 -->
+                </div>
+              </div>
+
+              <!-- 4-2. 추가 인원 -->
+              <div class="rsv-extra">
+                <div class="rsv-extra__left">
+                  <label class="rsv-extra__label" for="extra-guests"
+                    >추가 인원</label
+                  >
+                  <select class="rsv-extra__select" id="extra-guests">
+                    <!-- js 가 옵션 렌더 (없음 ~ room.capacity-room.min) -->
+                  </select>
+                </div>
+                <p class="rsv-extra__hint">
+                  기준 인원 2명, 추가 시 한 명당 객실 가격의 20%
+                </p>
+              </div>
+
+              <!-- 4-3. 총 합계 -->
+              <div class="rsv-total">
+                <span class="rsv-total__label">총 합계</span>
+                <span class="rsv-total__right">
+                  <span class="rsv-total__amount" id="total-amount">0</span>
+                  <span class="rsv-total__unit">원</span>
+                </span>
+              </div>
+
+              <!-- 4-4. 버튼 2개 -->
+              <div class="rsv-actions">
+                <button
+                  type="button"
+                  class="rsv-btn rsv-btn--cancel"
+                  id="btn-cancel"
+                >
+                  취소
+                </button>
+                <button
+                  type="button"
+                  class="rsv-btn rsv-btn--submit"
+                  id="btn-submit"
+                  disabled
+                >
+                  예약하기
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <!-- 5. 객실 설명(한/영) — 좌우 2단 아래 전체폭 별도 행 -->
+          <div class="rsv-desc">
+            <p class="rsv-desc__text" id="gallery-desc"></p>
+            <p
+              class="rsv-desc__text rsv-desc__text--eng"
+              id="gallery-desc-eng"
+            ></p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 안내 모달 -->
+    <div class="modal" id="alert-modal" hidden>
+      <div class="modal__backdrop"></div>
+      <div class="modal__box" role="alertdialog" aria-modal="true">
+        <p class="modal__text" id="alert-text"></p>
+        <button type="button" class="modal__ok" id="alert-ok">확인</button>
+      </div>
+    </div>
+
+    <!-- 푸터 (Web Component) + 맨 위로 버튼 (Web Component) -->
+    <my-footer></my-footer>
+
+    <to-the-top></to-the-top>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script type="module" src="./js/common.js"></script>
+    <script type="module" src="./js/reservation.js"></script>
+  </body>
+</html>

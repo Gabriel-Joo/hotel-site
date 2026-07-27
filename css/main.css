@@ -1,0 +1,349 @@
+/* ============================================================
+   main.css  —  메인 페이지(index.html) 전용
+   - 메인은 전체 화면 width (.content 1440 제약 없음)
+   - 각 섹션 내부 콘텐츠만 좌우 여백으로 가운데 정렬
+   ============================================================ */
+
+/* HOME 전용: ROOMS / EVENT 섹션 콘텐츠 폭.
+   아트보드 2000px 기준 좌우 60px 여백 = 1880px */
+:root {
+  --home-content-max: 1880px;
+}
+
+/* 공통 섹션 제목(ROOMS / EVENT)은 common.css .section-title 사용 */
+
+/* ============================================================
+   2. 히어로 슬라이드 (swiper, 전체폭)
+   ============================================================ */
+.hero {
+  width: 100%;
+}
+
+.hero__swiper {
+  width: 100%;
+  height: 800px; /* 시안 실측 (모바일 500px) */
+  overflow: hidden; /* 슬라이드가 밖으로 삐져나가 가로 스크롤 유발 방지 */
+}
+
+.hero__slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover; /* object-fit: cover 느낌 */
+  background-position: center; /* 사진 중앙부가 보이도록 명시 */
+  background-repeat: no-repeat;
+  background-color: #3a3a3a; /* 이미지 없을 때 fallback */
+}
+
+/* 어두운 오버레이 (흰 글씨 가독성) */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35); /* 0.25 → 0.35 상향(가독성) */
+  z-index: 1;
+}
+
+/* 카피 묶음: 슬라이드 전체를 덮으며 정중앙 정렬.
+   absolute inset:0 + flex column 센터링 → swiper 변환에도 흐들리지 않음 */
+.hero__copy {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 481px;
+  height: 140px;
+  z-index: 2; /* 오버레이(1) 위 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* 텍스트·버튼 간격 (시안 실측) */
+  text-align: center;
+  color: #fff;
+}
+
+.hero__title {
+  font-size: 60px; /* 시안 실측 */
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0; /* 시안값 */
+  color: #fff;
+}
+
+/* SEE MORE — 흰 outline 버튼, 배경 투명 */
+.hero__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 147px;
+  height: 48px;
+  padding: 9px 24px;
+  font-size: 22px; /* 시안 실측 */
+  font-weight: 300; /* KOROAD Light */
+  line-height: 1.2;
+  letter-spacing: -0.03em; /* 시안값 (SEE MORE 텍스트) */
+  white-space: nowrap; /* KOROAD 폭 변화 시에도 한 줄 유지 */
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 2px;
+  background: transparent;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* hover 시 흰 배경 + 검은 글씨 */
+.hero__btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* 페이지네이션 점 (하단 중앙, 흰색) */
+.hero__pagination {
+  bottom: 24px !important;
+}
+.hero__pagination .swiper-pagination-bullet {
+  background: #fff;
+  opacity: 0.6;
+}
+.hero__pagination .swiper-pagination-bullet-active {
+  opacity: 1;
+}
+
+/* ============================================================
+   공통 섹션 리듬 — ROOMS / EVENT 두 섹션의 상하 간격을 한 곳에서 관리.
+   Figma 시안: 두 섹션 합산 높이 ≈ 990px.
+     상단 여백(3.5rem) + 제목~카드(2.5rem) + 카드 하단(5rem) = 시안 실측값.
+   .section-title 의 margin(common.css)은 이 영역을 양분하던 기존 동작을
+   대체하므로 HOME 에서만 0으로 초기화하고 gap 으로 통합 관리.
+   ============================================================ */
+.section-rhythm {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* 상하 리듬 3구간 — 시안 실측 (두 섹션 합 ≈ 990px) */
+  padding-top: 3.5rem;     /* 섹션 시작 ~ 제목 */
+  padding-bottom: 5rem;    /* 카드 ~ 섹션 하단 */
+  gap: 2.5rem;             /* 제목 ~ 카드 */
+}
+
+/* HOME 의 section-title 은 .section-rhythm 의 gap 이 간격을 담당하므로
+   common.css 의 margin(top 3.5rem / bottom 2.5rem)을 여기서 상쇄. */
+.section-rhythm > .section-title {
+  margin: 0;
+}
+
+/* 인접한 두 .section-rhythm 사이의 수직 여백이 양쪽 padding
+   (앞 섹션 padding-bottom + 뒤 섹션 padding-top) 중복으로 쌓이지 않도록,
+   바로 뒤따르는 섹션의 위쪽 padding 을 제거한다.
+   결과: ROOMS 카드 끝 ~ EVENT 제목 = ROOMS padding-bottom(5rem) 하나로 통일.
+   ROOMS(첫 섹션)는 이 규칙에 해당하지 않으므로 건드리지 않는다. */
+.section-rhythm + .section-rhythm {
+  padding-top: 0;
+}
+
+/* ============================================================
+   3. ROOMS 섹션 — 전체폭 흐름, 좌측은 content 정렬선(1440 가운데) 에 맞춤
+   ============================================================ */
+.rooms {
+  width: 100%;
+  /* ROOMS 카드 끝 ~ EVENT 제목 사이 여백. .section-rhythm + .section-rhythm
+     { padding-top: 0 } 로 뒤섹션 위쪽이 제거된 상태이므로, 이 값이
+     두 섹션 사이 간격 전부가 된다. 5rem(80px) → 48px. */
+  padding-bottom: 48px;
+}
+
+/* HOME 전용: ROOMS / EVENT 두 슬라이드 공통 컨테이너.
+   메인은 전체폭 → max-width / 중앙정렬 제약 없음.
+   첫 카드가 화면(뷰포트) 왼쪽 끝에서 60px 떨어져 시작하도록 왼쪽 padding 60px.
+   오른쪽은 swiper overflow:visible 로 카드가 화면 끝까지 흘러 살짝 잘림.
+   두 슬라이드 모두 같은 padding 을 쓰므로 첫 카드 left 가 60px 로 세로 일치. */
+.slide-wrap {
+  width: 100%;
+  padding-left: 60px;     /* 시안: 첫 카드 ~ 화면 왼쪽 끝 60px */
+  /* 오른쪽 padding 없음 → 카드가 화면 끝까지 흐름 */
+}
+
+/* swiper 본체: 가로폭 채우고 다음 카드가 오른쪽 끝에서 잘려 보이도록. */
+.slide-wrap > .swiper {
+  width: 100%;
+  overflow: visible;
+}
+
+/* 슬라이드: 400px 고정폭 (간격 40px 은 JS spaceBetween 으로). */
+.slide-wrap .swiper-slide {
+  width: 400px;
+}
+
+/* ROOMS 슬라이드 높이 (카드 높이 = 300px).
+   swiper-wrap(300) → swiper 본체 → slide → room-card(height:100%) 로
+   높이가 단계별로 전달되어야 카드가 보인다.
+   .section-rhythm 이 flex column 이므로 swiper 본체/slide 의 높이를
+   명시하지 않으면 0으로 수렴한다 → ROOMS 카드가 안 보이는 원인.
+   (EVENT 는 .event__card 자체에 고정 높이가 있어 문제 없었음) */
+.rooms__swiper-wrap {
+  height: 300px;
+}
+.rooms__swiper-wrap .rooms__swiper {
+  height: 100%;
+}
+.rooms__swiper-wrap .swiper-slide {
+  height: 300px;
+}
+
+.room-card {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-color: #ddd; /* 이미지 없을 때 fallback */
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+/* 에러 메시지 */
+.rooms__error {
+  max-width: var(--content-max);
+  margin: 1.5rem auto 0;
+  padding: 0 var(--content-gutter);
+  text-align: center;
+  color: #c0392b;
+  font-size: 0.875rem;
+}
+
+/* ============================================================
+   4. EVENT 섹션 — ROOMS 와 동일한 swiper 슬라이드 구조.
+   (카드 4개라도 슬라이드 흐름 유지: 오른쪽 끝이 살짝 잘려 보임)
+   - 중간 래퍼(event__inner) 없이 section(.section-rhythm) 직접 자식으로
+     title + slide-wrap 배치 → ROOMS 와 동일한 평탄 구조로 좌우 정렬 일치.
+   ============================================================ */
+.event {
+  width: 100%;
+}
+
+/* EVENT 슬라이드 높이: 이미지 300 + 여백 17 + 캡션 24 = 341px.
+   가로 정렬은 공통 .slide-wrap / .slide-wrap .swiper-slide 가 담당. */
+.event__swiper-wrap {
+  height: 341px;
+}
+
+/* 카드(=swiper-slide): 400px 고정폭, 내부는 이미지+캡션 세로 배치. */
+.event__card {
+  display: flex;
+  flex-direction: column;
+  height: 341px; /* 시안 실측: 이미지 300 + 여백 17 + 캡션 24 */
+}
+
+/* 이미지 400×300, cover, radius 2px. 없으면 배경색 fallback */
+.event__img {
+  width: 400px;
+  height: 300px; /* 시안 실측 */
+  background-size: cover;
+  background-position: center;
+  background-color: #ccc; /* 이미지 없을 때 fallback */
+  border-radius: 2px; /* 시안 실측 */
+  flex-shrink: 0;
+}
+
+/* 캡션: 이미지 아래, 여백 17px, 높이 24px, 20px/300, 좌측 정렬 */
+.event__caption {
+  margin: 17px 0 0; /* 시안 실측 (이미지-캡션 사이 여백) */
+  height: 24px; /* 시안 실측 */
+  font-size: 20px; /* 시안 실측 */
+  font-weight: 300; /* KOROAD Light */
+  line-height: 1.2;
+  letter-spacing: -0.03em; /* 시안값 */
+  text-align: left;
+  color: #333;
+}
+
+/* ============================================================
+   4-1. 이미지 확대 라이트박스 (ROOMS .room-card / EVENT .event__img)
+   - 한 번에 하나만. 배경(딤드) 클릭 시 닫힘, 이미지 자체 클릭으로는 닫지 않음.
+   - swiper 슬라이드/스크롤에 영향 주지 않도록 fixed + 전체 덮음.
+   ============================================================ */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7); /* 딤드 오버레이 */
+}
+.lightbox__img {
+  width: 600px;
+  height: 450px;
+  border-radius: 2px;
+  background-size: cover;
+  background-position: center;
+  background-color: #ccc;
+  /* 모바일 비율 유지는 responsive.css 의 @media 규칙이 담당. */
+}
+
+/* ============================================================
+   5. 2024 BEST HOTEL 배너 (전체폭)
+   ============================================================ */
+.best {
+  position: relative;
+  width: 100%;
+  height: 480px; /* 시안 실측 */
+  background-color: #2a2a2a; /* 이미지 없을 때 fallback */
+  background-image: url("../images/banner_best.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 어두운 오버레이 */
+.best__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.62); /* 밝은 나무 텍스처 대비 상향(0.45→0.62) */
+}
+
+.best__inner {
+  position: relative; /* 오버레이 위 */
+  width: 407px; /* 시안 실측 */
+  height: 284px; /* 시안 실측 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px; /* 시안 실측 (요소 사이 간격) */
+  text-align: center;
+  color: #fff;
+}
+
+/* 메달 아이콘 (Font Awesome) — 폰트라 font-size로 크기 조절.
+   글리프가 em-box보다 작게 그려지므로 font-size 80px → 실제 높이 약 73px 근사. */
+.best__icon {
+  color: #ffffff;
+  font-size: 80px; /* 시안 아이콘 높이 약 73px */
+  line-height: 1;
+  flex-shrink: 0; /* gap 레이아웃에서 축소 방지 */
+}
+
+.best__title {
+  font-size: 50px; /* 시안 실측 */
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.03em; /* 시안값 */
+  text-align: center;
+  color: #ffffff;
+}
+
+.best__text {
+  width: 407px; /* 시안 실측 */
+  height: 96px; /* 시안 실측 (4줄) */
+  font-size: 20px; /* 시안 실측 */
+  font-weight: 300; /* KOROAD Light */
+  line-height: 1.2;
+  letter-spacing: 0; /* 시안값 (★ 0이다. -3% 아님) */
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8); /* 시안값 */
+}
+
+/* 모바일(<=1000px) 반응형 규칙은 css/responsive.css 한 곳에 단일 소스로 정리. */
+
